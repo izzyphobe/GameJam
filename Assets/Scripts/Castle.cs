@@ -7,8 +7,8 @@ public class Castle : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
     private Rigidbody2D rb;
     private BoxCollider2D bc;
-    [SerializeField] private float rate;
-   [SerializeField] private float delay;
+    [SerializeField] private float rate = 1;
+   [SerializeField] private float delay = 0;
     private int minionCap;
     public GameObject prefab;
    
