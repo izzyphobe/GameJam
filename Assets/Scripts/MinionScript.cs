@@ -115,6 +115,7 @@ public class MinionScript : MonoBehaviour
 
     void Die(){
         //Debug.Log(gameObject.tag + " minion died");
+        
         Destroy(gameObject);
     }
 

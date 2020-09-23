@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class minionCounter : MonoBehaviour
 {
@@ -16,19 +17,19 @@ public class minionCounter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        BlueText = transform.Find("BlueText").gameObject;
-        RedText = transform.Find("RedText").gameObject;
-        GreenText = transform.Find("GreenText").gameObject;
+        BlueText = GameObject.Find("BlueText").gameObject;
+        RedText = GameObject.Find("RedText").gameObject;
+        GreenText = GameObject.Find("GreenText").gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
         int blueCount = BlueSpawn.gameObject.transform.childCount;
-        BlueText.GetComponent<UnityEngine.UI.Text>().text = "Blue: " + blueCount;
+        BlueText.GetComponent<TextMeshProUGUI>().text = "" + blueCount;
         int redCount = RedSpawn.gameObject.transform.childCount;
-        RedText.GetComponent<UnityEngine.UI.Text>().text = "Red: " + redCount;
+        RedText.GetComponent<TextMeshProUGUI>().text =""+  redCount;
         int greenCount = GreenSpawn.gameObject.transform.childCount;
-        GreenText.GetComponent<UnityEngine.UI.Text>().text = "Green: " + greenCount;
+        GreenText.GetComponent<TextMeshProUGUI>().text =""+ greenCount;
     }
 }
