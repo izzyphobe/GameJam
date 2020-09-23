@@ -1,4 +1,6 @@
 Game Jam Repo
+Contributors: Kenneth McLaren, Jackson Meyer, Izzy Thompson, Max Tribble
+
 
 Three towers spawn minions
 
