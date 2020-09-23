@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Minion : MonoBehaviour
+public class MinionScript : MonoBehaviour
 {
     [SerializeField] private LayerMask groundMask;
     private Rigidbody2D rb;
@@ -10,6 +10,9 @@ public class Minion : MonoBehaviour
 
     public Transform target;
     public float speed;
+    public int health;
+    public float bounce;
+    MinionScript enemy;
 
     // Start is called before the first frame update
     void Start()
@@ -46,12 +49,27 @@ public class Minion : MonoBehaviour
     void SetTarget(GameObject t){ //change target to t
 
     }
+    
+    void Hurt(){
+        Debug.Log(gameObject.tag + " minion hurt");
+        health--;
+        if(health <= 0)
+            Die();
+    }
+
+    void Die(){
+        Debug.Log(gameObject.tag + " minion died");
+        Destroy(gameObject);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision){
-        Debug.Log("colission");
         if(!collision.gameObject.tag.Equals(tag)){
-            Debug.Log("colission between " + tag+ "and " + collision.gameObject.tag);
-            Destroy(collision.gameObject);
-            Destroy(this.gameObject);
+            //Debug.Log("colission between " + tag+ " and " + collision.gameObject.tag);
+            enemy = collision.gameObject.GetComponent<MinionScript>();
+            transform.position = Vector2.MoveTowards(transform.position, collision.gameObject.transform.position, -1*bounce);
+            collision.gameObject.transform.position = Vector2.MoveTowards(collision.gameObject.transform.position, transform.position, -1*bounce);
+            enemy.Hurt();
+            this.Hurt();
         }
     }
 }

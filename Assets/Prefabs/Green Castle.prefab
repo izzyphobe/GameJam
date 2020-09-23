@@ -98,6 +98,6 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 0
-  rate: 0.4
-  delay: 0.3
+  rate: 1
+  delay: 0.5
   prefab: {fileID: 6224392282015862822, guid: 2ba5b7ccae137724889205782a91dc86, type: 3}
