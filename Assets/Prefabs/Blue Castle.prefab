@@ -55,6 +55,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 649d06a711de02c4a8e9263ecdb47545, type: 3}
+    - target: {fileID: 228329319166275223, guid: b6976840aa0796148ab3c904962f47d2, type: 3}
+      propertyPath: prefab
+      value: 
+      objectReference: {fileID: 6339096021553359595, guid: 5ea08d829d9663d4cb46ecf14b50da4b, type: 3}
     - target: {fileID: 228329319166275304, guid: b6976840aa0796148ab3c904962f47d2, type: 3}
       propertyPath: m_Name
       value: Blue Castle

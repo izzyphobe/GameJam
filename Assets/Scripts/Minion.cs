@@ -46,5 +46,12 @@ public class Minion : MonoBehaviour
     void SetTarget(GameObject t){ //change target to t
 
     }
-
+    private void OnCollisionEnter2D(Collision2D collision){
+        Debug.Log("colission");
+        if(!collision.gameObject.tag.Equals(tag)){
+            Debug.Log("colission between " + tag+ "and " + collision.gameObject.tag);
+            Destroy(collision.gameObject);
+            Destroy(this.gameObject);
+        }
+    }
 }
