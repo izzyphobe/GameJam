@@ -22,13 +22,14 @@ public class HealthBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        localScale.x = parent.health * 0.5f;
+        //Debug.Log(parent.health / parent.maxhealth);
+        localScale.x = parent.health / parent.maxhealth;
         transform.localScale = localScale;
         spriteRenderer.color = getColor(parent.health);
     }
 
     private Color getColor(float health){
-        if(health > 0.5f) return Color.green;
+        if((parent.health / parent.maxhealth) > 0.5f) return Color.green;
         else return Color.red;
     }
 }

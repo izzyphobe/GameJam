@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2647116981924722657}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.8, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.15, z: 1}
+  m_LocalPosition: {x: 0, y: -0.64, z: 0}
+  m_LocalScale: {x: 1.2600842, y: 0.15, z: 1}
   m_Children: []
   m_Father: {fileID: 5990961638798966537}
   m_RootOrder: 0
@@ -235,5 +235,7 @@ MonoBehaviour:
     m_Bits: 0
   target: {fileID: 0}
   speed: 0.5
-  health: 4
-  bounce: 3
+  maxhealth: 6
+  health: 6
+  bounce: 0.25
+  isInBattleGround: 0

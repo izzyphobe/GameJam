@@ -10,14 +10,18 @@ public class MinionScript : MonoBehaviour
 
     public Transform target;
     public float speed;
-    public int health;
+    public float maxhealth;
+    public float health;
     public float bounce;
     MinionScript enemy;
+
+    public bool isInBattleGround;
 
     // Start is called before the first frame update
     void Start()
     {
-        target = GameObject.Find("Battlefield").transform;
+        health = maxhealth;
+        isInBattleGround = false;
         rb = GetComponent<Rigidbody2D>();
         cc = GetComponent<CircleCollider2D>();
         //initially - target = "battle area" in center
@@ -38,27 +42,79 @@ public class MinionScript : MonoBehaviour
     }
 
     void FixedUpdate(){
-        //move toward target
-        transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+        MoveTowardsTarget();
     }
 
     void Attack(){
 
     }
 
+    //Move Minion twords targert if it exists
+    // else aquire new target and move twords it
+    void MoveTowardsTarget(){
+        if(target == null)
+            AquireTarget();
+        
+        transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+    }
+
+    // Sets target to center of battleground if not in battleground
+    // else to closest enemy
+    public void AquireTarget(){
+        //Debug.Log("getting new target");
+        if(isInBattleGround){
+            target = FindClosestEnemy().transform;
+            Debug.Log("Targeting nearest enemy");
+        }
+        else
+            target = GameObject.Find("Battlefield").transform;
+    }
+
+    //FindClosestEnemy returns closest gameObject of opposing faction. Returns null if no targets
+    // based on second example from https://docs.unity3d.com/ScriptReference/GameObject.FindGameObjectsWithTag.html
+    public GameObject FindClosestEnemy(){
+        List<GameObject> gos = new List<GameObject>();
+        if(!tag.Equals("Red")){
+            gos.AddRange(GameObject.FindGameObjectsWithTag("Red"));
+        }
+        if(!tag.Equals("Blue")){
+            gos.AddRange(GameObject.FindGameObjectsWithTag("Blue"));
+        }
+        if(!tag.Equals("Green")){
+            gos.AddRange(GameObject.FindGameObjectsWithTag("Green"));
+        }
+
+        GameObject closest = null;
+        float distance = Mathf.Infinity;
+        Vector3 position = transform.position;
+        foreach (GameObject go in gos)
+        {
+            Vector3 diff = go.transform.position - position;
+            float curDistance = diff.sqrMagnitude;
+            if (curDistance < distance)
+            {
+                closest = go;
+                distance = curDistance;
+            }
+        }
+        return closest;
+    }
+
     void SetTarget(GameObject t){ //change target to t
 
     }
+
+    
     
     void Hurt(){
-        Debug.Log(gameObject.tag + " minion hurt");
+        //Debug.Log(gameObject.tag + " minion hurt");
         health--;
         if(health <= 0)
             Die();
     }
 
     void Die(){
-        Debug.Log(gameObject.tag + " minion died");
+        //Debug.Log(gameObject.tag + " minion died");
         Destroy(gameObject);
     }
 
