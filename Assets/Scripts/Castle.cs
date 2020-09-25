@@ -34,7 +34,7 @@ public class Castle : MonoBehaviour
     }
 
     void OnMouseDown(){
-        controls.SendMessage("SwitchCastle", this.gameObject);
+        controls.BroadcastMessage("SwitchCastle", this.gameObject);
     }
 
     void Spawn(){
@@ -46,15 +46,16 @@ public class Castle : MonoBehaviour
         
     }
 
-    public void ChangeSpawnRate(){
+    void ChangeSpawnRate(){
         rate*=1.2f;
+        Debug.Log("Spawn rate up");
     }
     
-    public void ChangeHP(){
+    void ChangeHP(){
         minion.maxhealth +=1;
     }
 
-    public void ChangeSpeed(){
+    void ChangeSpeed(){
         minion.speed *= 1.2f;
     }
 

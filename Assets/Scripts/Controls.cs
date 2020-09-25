@@ -8,6 +8,7 @@ public class Controls : MonoBehaviour
 {
     string castleName;
     TextMeshProUGUI title;
+    GameObject currentCastle;
     
     // Start is called before the first frame update
     void Start()
@@ -26,9 +27,18 @@ public class Controls : MonoBehaviour
         this.tag = castle.tag;
         Debug.Log("got switch");
         title.text = this.tag + " Castle";
+        currentCastle = castle;
     }
 
-    public void check(){
-        Debug.Log("click");
+    void ChangeSpawnRate(){
+        currentCastle.SendMessage("ChangeSpawnRate");
+    }
+
+    void ChangeHP(){
+        currentCastle.SendMessage("ChangeHP");
+    }
+
+    void ChangeSpeed(){
+        currentCastle.SendMessage("ChangeSpeed");
     }
 }
