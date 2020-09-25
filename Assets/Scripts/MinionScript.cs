@@ -64,7 +64,7 @@ public class MinionScript : MonoBehaviour
         //Debug.Log("getting new target");
         if(isInBattleGround){
             target = FindClosestEnemy().transform;
-            Debug.Log("Targeting nearest enemy");
+            // Debug.Log("Targeting nearest enemy");
         }
         else
             target = GameObject.Find("Battlefield").transform;

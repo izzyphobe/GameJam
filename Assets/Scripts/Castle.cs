@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Castle : MonoBehaviour
 {
@@ -12,11 +13,13 @@ public class Castle : MonoBehaviour
     private int minionCap;
     public GameObject prefab;
     private MinionScript minion;
+    public GameObject controls;
    
 
     // Start is called before the first frame update
     void Start()
     {
+        controls = GameObject.Find("PlayerControls");
         minion = prefab.GetComponent<MinionScript>();
         prefab.GetComponent<MinionScript>().maxhealth = 6;
         minionCap = 5;
@@ -30,6 +33,10 @@ public class Castle : MonoBehaviour
         
     }
 
+    void OnMouseDown(){
+        controls.SendMessage("SwitchCastle", this.gameObject);
+    }
+
     void Spawn(){
         GameObject child;
         // if(transform.childCount < minionCap){
@@ -39,15 +46,15 @@ public class Castle : MonoBehaviour
         
     }
 
-    void ChangeSpawnRate(){
+    public void ChangeSpawnRate(){
         rate*=1.2f;
     }
     
-    void ChangeHP(){
+    public void ChangeHP(){
         minion.maxhealth +=1;
     }
 
-    void ChangeSpeed(){
+    public void ChangeSpeed(){
         minion.speed *= 1.2f;
     }
 
