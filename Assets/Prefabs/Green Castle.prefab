@@ -101,3 +101,5 @@ MonoBehaviour:
   rate: 2
   delay: 0
   prefab: {fileID: 6224392282015862822, guid: 2ba5b7ccae137724889205782a91dc86, type: 3}
+  minSpawn: 0.5
+  maxSpawn: 2
