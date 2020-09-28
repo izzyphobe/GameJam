@@ -14,12 +14,14 @@ public class MinionScript : MonoBehaviour
     public float health;
     public float bounce;
     MinionScript enemy;
+    bool isInHand;
 
     public bool isInBattleGround;
 
     // Start is called before the first frame update
     void Start()
     {
+        isInHand = false;
         health = maxhealth;
         isInBattleGround = false;
         rb = GetComponent<Rigidbody2D>();
@@ -42,12 +44,33 @@ public class MinionScript : MonoBehaviour
     }
 
     void FixedUpdate(){
-        MoveTowardsTarget();
+        if (isInHand)
+        {
+            FollowMouse();
+        }
+        else
+        {
+            MoveTowardsTarget();
+        }
     }
 
     void Attack(){
 
     }
+
+    public void TogglePickup()
+    {
+        isInHand = !isInHand;
+    }
+
+
+    void FollowMouse()
+    {
+        Vector3 MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        MousePos.z = transform.position.z;
+        transform.position = MousePos;
+    }
+
 
     //Move Minion twords targert if it exists
     // else aquire new target and move twords it
@@ -64,7 +87,7 @@ public class MinionScript : MonoBehaviour
         //Debug.Log("getting new target");
         if(isInBattleGround){
             target = FindClosestEnemy().transform;
-            Debug.Log("Targeting nearest enemy");
+            //Debug.Log("Targeting nearest enemy");
         }
         else
             target = GameObject.Find("Battlefield").transform;
@@ -104,11 +127,9 @@ public class MinionScript : MonoBehaviour
 
     }
 
-    
-    
-    void Hurt(){
+    public void Hurt(int damage = 1){
         //Debug.Log(gameObject.tag + " minion hurt");
-        health--;
+        health = health - damage;
         if(health <= 0)
             Die();
     }
@@ -129,4 +150,5 @@ public class MinionScript : MonoBehaviour
             this.Hurt();
         }
     }
+
 }
