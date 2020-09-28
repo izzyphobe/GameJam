@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Castle : MonoBehaviour
 {
@@ -78,6 +79,7 @@ public class Castle : MonoBehaviour
         //Debug.Log(gameObject.tag + " minion died");
         Time.timeScale = 0;
         SceneManager.LoadScene("GameOver");
+
     }
 
 }

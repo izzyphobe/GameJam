@@ -9,6 +9,7 @@ public class StartMenuButtons : MonoBehaviour
     public void startGame()
     {
         SceneManager.LoadScene("SampleScene");
+        Time.timeScale = 1;
     }
 
     public void resetHighScore()

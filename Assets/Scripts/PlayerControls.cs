@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerControls : MonoBehaviour
 {
@@ -9,11 +10,20 @@ public class PlayerControls : MonoBehaviour
     delegate void Del(GameObject Minion);
     Del selectedTool;
     Vector3 MousePos;
+    public Button GH;
+    public Button SM;
+    public Button HL;
+    ColorBlock selectColors;
+    ColorBlock normColors;
 
     // Start is called before the first frame update
     void Start()
     {
         selectedTool = StubMethod;
+        selectColors = GH.colors;
+        normColors = SM.colors;
+        GH.colors = normColors;
+        HL.colors = normColors;
     }
 
     // Update is called once per frame
@@ -21,6 +31,16 @@ public class PlayerControls : MonoBehaviour
     {
         TargetUnderMouse();
         if(TargetMinion != null)
+        {
+            selectedTool(TargetMinion);
+        }
+    }
+
+    void onMouseDown()
+    {
+        Debug.Log("Click");
+        TargetUnderMouse();
+        if (TargetMinion != null)
         {
             selectedTool(TargetMinion);
         }
@@ -48,31 +68,40 @@ public class PlayerControls : MonoBehaviour
     {
         Debug.Log("Setting godhand");
         selectedTool = GodHand;
+        GH.colors = selectColors;
+        SM.colors = normColors;
+        HL.colors = normColors;
     }
 
     //moves minion to mouse location
     void Smite(GameObject Minion)
     {
         Debug.Log("Calling Smite");
-        Minion.GetComponent<MinionScript>().Hurt();
+        Minion.GetComponent<MinionScript>().Hurt(5);
     }
 
     public void SetSmite()
     {
         Debug.Log("Setting Smite");
         selectedTool = Smite;
+        GH.colors = normColors;
+        SM.colors = selectColors;
+        HL.colors = normColors;
     }
 
     void Heal(GameObject Minion)
     {
         Debug.Log("Calling Smite");
-        Minion.GetComponent<MinionScript>().Hurt(-1);
+        Minion.GetComponent<MinionScript>().Hurt(-5);
     }
 
     public void SetHeal()
     {
         Debug.Log("Setting Heal");
         selectedTool = Heal;
+        GH.colors = normColors;
+        SM.colors = normColors;
+        HL.colors = selectColors;
     }
 
 

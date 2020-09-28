@@ -136,6 +136,9 @@ public class MinionScript : MonoBehaviour
         {
             Die();
             return true;
+        } else if(health> maxhealth)
+        {
+            health = maxhealth;
         }
         return false;
     }
@@ -170,7 +173,7 @@ public class MinionScript : MonoBehaviour
         if(!collision.gameObject.tag.Equals(tag)){
             enemyCastle = collision.gameObject.GetComponent<Castle>();
             if(enemyCastle != null){
-                Debug.Log("Hurting castel");
+                //Debug.Log("Hurting castel");
                 enemyCastle.Hurt(attack);
                 Die();
             }
