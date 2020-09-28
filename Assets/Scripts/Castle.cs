@@ -14,7 +14,7 @@ public class Castle : MonoBehaviour
     private MinionScript minion;
     private float minSpawn = 1f;
     private float maxSpawn = 2f;
-    private float HP;
+    private float health;
     private int xp, level;
 
 
@@ -59,6 +59,21 @@ public class Castle : MonoBehaviour
         level++;
         xp -= (int) Mathf.Pow(5f, level);
     }
+    public bool Hurt(int damage = 1){
+        //Debug.Log(gameObject.tag + " minion hurt");
+        health = health - damage;
+        if(health <= 0)
+        {
+            Die();
+            return true;
+        }
+        return false;
+    }
 
+    void Die(){
+        //Debug.Log(gameObject.tag + " minion died");
+        
+        Destroy(gameObject);
+    }
 
 }
