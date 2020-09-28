@@ -20,7 +20,7 @@ public class MinionScript : MonoBehaviour
     TextMesh LevelCounterMesh;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         level = xp = 0;
         attack = 1;
@@ -127,7 +127,7 @@ public class MinionScript : MonoBehaviour
 
     }
 
-    //retunds if died
+    //retunds true if died
     public bool Hurt(int damage = 1){
         //Debug.Log(gameObject.tag + " minion hurt");
         health = health - damage;
@@ -145,14 +145,13 @@ public class MinionScript : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void gainXP()
+    public void gainXP(int xpGained = 1)
     {
-        if (Mathf.Pow(2f, level) <= xp++) LevelUp();
+        while(Mathf.Pow(2f, level) <= (xp+= xpGained)) LevelUp();
     }
 
-
     //TODO: nerf
-    void LevelUp()
+    public void LevelUp()
     {
         level++;
         maxhealth *= 1.5f;
@@ -160,7 +159,8 @@ public class MinionScript : MonoBehaviour
         attack *= 2;
         health = maxhealth;
         LevelCounterMesh.text = level.ToString();
-        Debug.Log("Level Up!");
+        //Debug.Log("Level Up!");
+        xp -= (int) Mathf.Pow(2f, level);
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
