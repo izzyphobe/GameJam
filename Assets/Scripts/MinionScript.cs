@@ -161,7 +161,7 @@ public class MinionScript : MonoBehaviour
     {
         level++;
         maxhealth *= 1.5f;
-        //speed *= 1.5f; waaay too fast at high levels
+        speed += .1f;
         attack *= 2;
         health = maxhealth;
         LevelCounterMesh.text = level.ToString();

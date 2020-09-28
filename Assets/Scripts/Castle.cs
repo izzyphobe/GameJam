@@ -63,6 +63,7 @@ public class Castle : MonoBehaviour
     {
         level++;
         xp -= (int) Mathf.Pow(5f, level);
+        
     }
     public bool Hurt(int damage = 1){
         //Debug.Log(gameObject.tag + " minion hurt");
