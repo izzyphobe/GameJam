@@ -22,6 +22,7 @@ public class Castle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        health = 100f;
         minion = prefab.GetComponent<MinionScript>();
         minion.maxhealth = 10;
         minion.speed = 0.5f;
