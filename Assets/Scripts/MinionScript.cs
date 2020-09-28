@@ -15,12 +15,16 @@ public class MinionScript : MonoBehaviour
     public float bounce;
     MinionScript enemy;
     bool isInHand;
-
     public bool isInBattleGround;
+    int level, xp, attack;
+    TextMesh LevelCounterMesh;
 
     // Start is called before the first frame update
     void Start()
     {
+        level = xp = 0;
+        attack = 1;
+        LevelCounterMesh = transform.Find("LevelCounter").gameObject.GetComponent<TextMesh>();
         isInHand = false;
         health = maxhealth;
         isInBattleGround = false;
@@ -52,10 +56,6 @@ public class MinionScript : MonoBehaviour
         {
             MoveTowardsTarget();
         }
-    }
-
-    void Attack(){
-
     }
 
     public void TogglePickup()
@@ -127,11 +127,16 @@ public class MinionScript : MonoBehaviour
 
     }
 
-    public void Hurt(int damage = 1){
+    //retunds if died
+    public bool Hurt(int damage = 1){
         //Debug.Log(gameObject.tag + " minion hurt");
         health = health - damage;
         if(health <= 0)
+        {
             Die();
+            return true;
+        }
+        return false;
     }
 
     void Die(){
@@ -140,14 +145,35 @@ public class MinionScript : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void gainXP()
+    {
+        if (Mathf.Pow(2f, level) <= xp++) LevelUp();
+    }
+
+
+    //TODO: nerf
+    void LevelUp()
+    {
+        level++;
+        maxhealth *= 1.5f;
+        //speed *= 1.5f; waaay too fast at high levels
+        attack *= 2;
+        health = maxhealth;
+        LevelCounterMesh.text = level.ToString();
+        Debug.Log("Level Up!");
+    }
+
     private void OnCollisionEnter2D(Collision2D collision){
         if(!collision.gameObject.tag.Equals(tag)){
             //Debug.Log("colission between " + tag+ " and " + collision.gameObject.tag);
             enemy = collision.gameObject.GetComponent<MinionScript>();
+
+            //bounce
             transform.position = Vector2.MoveTowards(transform.position, collision.gameObject.transform.position, -1*bounce);
             collision.gameObject.transform.position = Vector2.MoveTowards(collision.gameObject.transform.position, transform.position, -1*bounce);
-            enemy.Hurt();
-            this.Hurt();
+
+            //attack
+            if (enemy.Hurt(attack)) gainXP();
         }
     }
 

@@ -18,7 +18,6 @@ public class BattlegroundScript : MonoBehaviour
             //Debug.Log("colission between " + tag+ " and " + collision.gameObject.tag);
             MinionScript minion = collision.gameObject.GetComponent<MinionScript>();
             minion.isInBattleGround = false;
-            minion.AquireTarget();
         }
     }
 }

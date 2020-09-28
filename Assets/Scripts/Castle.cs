@@ -7,21 +7,24 @@ public class Castle : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
     private Rigidbody2D rb;
     private BoxCollider2D bc;
-    [SerializeField] private float rate = 1;
+    [SerializeField] private float rate = 0.5f;
    [SerializeField] private float delay = 0;
     private int minionCap;
     public GameObject prefab;
     private MinionScript minion;
-   
+    float minSpawn = 0.5f;
+    float maxSpawn = 2f;
+
 
     // Start is called before the first frame update
     void Start()
     {
         minion = prefab.GetComponent<MinionScript>();
-        prefab.GetComponent<MinionScript>().maxhealth = 6;
-        minionCap = 5;
-        InvokeRepeating("Spawn",delay,rate);
-
+        prefab.GetComponent<MinionScript>().maxhealth = 10;
+        prefab.GetComponent<MinionScript>().speed = 0.5f;
+        minionCap = 5000;
+        //InvokeRepeating("Spawn",delay,rate);
+        StartCoroutine(SpawnWithCoroutine());
     }
 
     // Update is called once per frame
@@ -30,13 +33,15 @@ public class Castle : MonoBehaviour
         
     }
 
-    void Spawn(){
-        GameObject child;
-        // if(transform.childCount < minionCap){
-            child = Instantiate(prefab, transform);
-            child.tag = this.tag;
-        // }
-        
+    IEnumerator SpawnWithCoroutine(){
+        while (true)
+        {
+            var delay = Random.Range(minSpawn, maxSpawn);
+            Debug.Log("callingSpawn. delay till next call:" + delay);
+            GameObject NewChild = Instantiate(prefab, transform);
+            NewChild.tag = this.tag;
+            yield return new WaitForSeconds(delay);
+        }
     }
 
     void ChangeSpawnRate(){

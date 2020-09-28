@@ -19,7 +19,7 @@ public class PlayerControls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        targetUnderMouse();
+        TargetUnderMouse();
         if(TargetMinion != null)
         {
             selectedTool(TargetMinion);
@@ -76,7 +76,7 @@ public class PlayerControls : MonoBehaviour
     }
 
 
-    void targetUnderMouse()
+    void TargetUnderMouse()
     {
         
         if (Input.GetMouseButtonDown(0))
