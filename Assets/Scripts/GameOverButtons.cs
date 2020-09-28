@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 public class GameOverButtons : MonoBehaviour
 {
    public void Replay(){
-       SceneManager.UnloadSceneAsync("SampleScene");
+       //SceneManager.UnloadSceneAsync("SampleScene");
        SceneManager.LoadScene("SampleScene");
    }
    public void MainMenu(){
-       SceneManager.UnloadSceneAsync("SampleScene");
+       //SceneManager.UnloadSceneAsync("SampleScene");
        SceneManager.LoadScene("StartMenu");
    }
 }

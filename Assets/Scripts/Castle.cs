@@ -77,7 +77,7 @@ public class Castle : MonoBehaviour
     void Die(){
         //Debug.Log(gameObject.tag + " minion died");
         Time.timeScale = 0;
-        SceneManager.LoadScene("GameOver", LoadSceneMode.Additive);
+        SceneManager.LoadScene("GameOver");
     }
 
 }
