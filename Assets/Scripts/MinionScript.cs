@@ -14,6 +14,7 @@ public class MinionScript : MonoBehaviour
     public float health;
     public float bounce;
     MinionScript enemy;
+    Castle enemyCastle;
     bool isInHand;
     public bool isInBattleGround;
     int level, xp, attack;
@@ -164,16 +165,26 @@ public class MinionScript : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
+        
+
         if(!collision.gameObject.tag.Equals(tag)){
-            //Debug.Log("colission between " + tag+ " and " + collision.gameObject.tag);
-            enemy = collision.gameObject.GetComponent<MinionScript>();
+            enemyCastle = collision.gameObject.GetComponent<Castle>();
+            if(enemyCastle != null){
+                Debug.Log("Hurting castel");
+                enemyCastle.Hurt(attack);
+                Die();
+            }
+            else{
+                //Debug.Log("colission between " + tag+ " and " + collision.gameObject.tag);
+                enemy = collision.gameObject.GetComponent<MinionScript>();
+                //bounce
+                transform.position = Vector2.MoveTowards(transform.position, collision.gameObject.transform.position, -1*bounce);
+                collision.gameObject.transform.position = Vector2.MoveTowards(collision.gameObject.transform.position, transform.position, -1*bounce);
 
-            //bounce
-            transform.position = Vector2.MoveTowards(transform.position, collision.gameObject.transform.position, -1*bounce);
-            collision.gameObject.transform.position = Vector2.MoveTowards(collision.gameObject.transform.position, transform.position, -1*bounce);
-
-            //attack
-            if (enemy.Hurt(attack)) gainXP();
+                //attack
+                if (enemy.Hurt(attack)) gainXP();
+            }
+            
         }
     }
 

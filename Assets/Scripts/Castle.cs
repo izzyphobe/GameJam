@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Castle : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class Castle : MonoBehaviour
     private MinionScript minion;
     private float minSpawn = 1f;
     private float maxSpawn = 2f;
-    private float health;
+    public float health, maxhealth;
+
     private int xp, level;
 
 
@@ -22,7 +24,8 @@ public class Castle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        health = 100f;
+
+        maxhealth = health = 10f;
         minion = prefab.GetComponent<MinionScript>();
         minion.maxhealth = 10;
         minion.speed = 0.5f;
@@ -73,8 +76,8 @@ public class Castle : MonoBehaviour
 
     void Die(){
         //Debug.Log(gameObject.tag + " minion died");
-        
-        Destroy(gameObject);
+        Time.timeScale = 0;
+        SceneManager.LoadScene("GameOver", LoadSceneMode.Additive);
     }
 
 }
