@@ -14,13 +14,14 @@ public class MinionScript : MonoBehaviour
     public float health;
     public float bounce;
     MinionScript enemy;
+    Castle enemyCastle, parentCastle;
     bool isInHand;
     public bool isInBattleGround;
     int level, xp, attack;
     TextMesh LevelCounterMesh;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         level = xp = 0;
         attack = 1;
@@ -30,6 +31,7 @@ public class MinionScript : MonoBehaviour
         isInBattleGround = false;
         rb = GetComponent<Rigidbody2D>();
         cc = GetComponent<CircleCollider2D>();
+        parentCastle = transform.parent.gameObject.GetComponent<Castle>();
         //initially - target = "battle area" in center
         
     }
@@ -127,7 +129,7 @@ public class MinionScript : MonoBehaviour
 
     }
 
-    //retunds if died
+    //retunds true if died
     public bool Hurt(int damage = 1){
         //Debug.Log(gameObject.tag + " minion hurt");
         health = health - damage;
@@ -135,6 +137,9 @@ public class MinionScript : MonoBehaviour
         {
             Die();
             return true;
+        } else if(health> maxhealth)
+        {
+            health = maxhealth;
         }
         return false;
     }
@@ -145,35 +150,46 @@ public class MinionScript : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void gainXP()
+    public void gainXP(int xpGained = 1)
     {
-        if (Mathf.Pow(2f, level) <= xp++) LevelUp();
+        parentCastle.gainXP();
+        while(Mathf.Pow(2f, level) <= (xp+= xpGained)) LevelUp();
     }
 
-
     //TODO: nerf
-    void LevelUp()
+    public void LevelUp()
     {
         level++;
         maxhealth *= 1.5f;
-        //speed *= 1.5f; waaay too fast at high levels
+        speed += .1f;
         attack *= 2;
         health = maxhealth;
         LevelCounterMesh.text = level.ToString();
-        Debug.Log("Level Up!");
+        //Debug.Log("Level Up!");
+        xp -= (int) Mathf.Pow(2f, level);
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
+        
+
         if(!collision.gameObject.tag.Equals(tag)){
-            //Debug.Log("colission between " + tag+ " and " + collision.gameObject.tag);
-            enemy = collision.gameObject.GetComponent<MinionScript>();
+            enemyCastle = collision.gameObject.GetComponent<Castle>();
+            if(enemyCastle != null){
+                //Debug.Log("Hurting castel");
+                enemyCastle.Hurt(attack);
+                Die();
+            }
+            else{
+                //Debug.Log("colission between " + tag+ " and " + collision.gameObject.tag);
+                enemy = collision.gameObject.GetComponent<MinionScript>();
+                //bounce
+                transform.position = Vector2.MoveTowards(transform.position, collision.gameObject.transform.position, -1*bounce);
+                collision.gameObject.transform.position = Vector2.MoveTowards(collision.gameObject.transform.position, transform.position, -1*bounce);
 
-            //bounce
-            transform.position = Vector2.MoveTowards(transform.position, collision.gameObject.transform.position, -1*bounce);
-            collision.gameObject.transform.position = Vector2.MoveTowards(collision.gameObject.transform.position, transform.position, -1*bounce);
-
-            //attack
-            if (enemy.Hurt(attack)) gainXP();
+                //attack
+                if (enemy.Hurt(attack)) gainXP();
+            }
+            
         }
     }
 

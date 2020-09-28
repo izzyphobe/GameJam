@@ -26,10 +26,10 @@ public class minionCounter : MonoBehaviour
     void Update()
     {
         int blueCount = BlueSpawn.gameObject.transform.childCount;
-        BlueText.GetComponent<TextMeshProUGUI>().text = "" + blueCount;
+        BlueText.GetComponent<TextMeshProUGUI>().text = "" + (blueCount-1);
         int redCount = RedSpawn.gameObject.transform.childCount;
-        RedText.GetComponent<TextMeshProUGUI>().text =""+  redCount;
+        RedText.GetComponent<TextMeshProUGUI>().text =""+  (redCount-1);
         int greenCount = GreenSpawn.gameObject.transform.childCount;
-        GreenText.GetComponent<TextMeshProUGUI>().text =""+ greenCount;
+        GreenText.GetComponent<TextMeshProUGUI>().text =""+ (greenCount-1);
     }
 }

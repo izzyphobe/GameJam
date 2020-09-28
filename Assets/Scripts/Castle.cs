@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Castle : MonoBehaviour
 {
@@ -12,16 +14,22 @@ public class Castle : MonoBehaviour
     private int minionCap;
     public GameObject prefab;
     private MinionScript minion;
-    float minSpawn = 0.5f;
-    float maxSpawn = 2f;
+    private float minSpawn = 1f;
+    private float maxSpawn = 2f;
+    public float health, maxhealth;
+
+    private int xp, level;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
+
+        maxhealth = health = 10f;
         minion = prefab.GetComponent<MinionScript>();
-        prefab.GetComponent<MinionScript>().maxhealth = 10;
-        prefab.GetComponent<MinionScript>().speed = 0.5f;
+        minion.maxhealth = 10;
+        minion.speed = 0.5f;
         minionCap = 5000;
         //InvokeRepeating("Spawn",delay,rate);
         StartCoroutine(SpawnWithCoroutine());
@@ -37,30 +45,42 @@ public class Castle : MonoBehaviour
         while (true)
         {
             var delay = Random.Range(minSpawn, maxSpawn);
-            Debug.Log("callingSpawn. delay till next call:" + delay);
+            //Debug.Log("callingSpawn. delay till next call:" + delay);
             GameObject NewChild = Instantiate(prefab, transform);
+            MinionScript childScript = NewChild.GetComponent<MinionScript>();
             NewChild.tag = this.tag;
+            for(int i = 0; i<level; i++) childScript.LevelUp();
             yield return new WaitForSeconds(delay);
         }
     }
 
-    void ChangeSpawnRate(){
-        rate*=1.2f;
-    }
-    
-    void ChangeHP(){
-        minion.maxhealth +=1;
+    public void gainXP(int xpGained = 1)
+    {
+        while(Mathf.Pow(5f, level) <= (xp+= xpGained)) LevelUp();
     }
 
-    void ChangeSpeed(){
-        minion.speed *= 1.2f;
+    public void LevelUp()
+    {
+        level++;
+        xp -= (int) Mathf.Pow(5f, level);
+        
+    }
+    public bool Hurt(int damage = 1){
+        //Debug.Log(gameObject.tag + " minion hurt");
+        health = health - damage;
+        if(health <= 0)
+        {
+            Die();
+            return true;
+        }
+        return false;
     }
 
-    void ChangeBounce(){
-    
+    void Die(){
+        //Debug.Log(gameObject.tag + " minion died");
+        Time.timeScale = 0;
+        SceneManager.LoadScene("GameOver");
+
     }
 
-    void ChangeCap(){
-        minionCap++;
-    }
 }
