@@ -14,7 +14,7 @@ public class MinionScript : MonoBehaviour
     public float health;
     public float bounce;
     MinionScript enemy;
-    Castle enemyCastle;
+    Castle enemyCastle, parentCastle;
     bool isInHand;
     public bool isInBattleGround;
     int level, xp, attack;
@@ -31,6 +31,7 @@ public class MinionScript : MonoBehaviour
         isInBattleGround = false;
         rb = GetComponent<Rigidbody2D>();
         cc = GetComponent<CircleCollider2D>();
+        parentCastle = transform.parent.gameObject.GetComponent<Castle>();
         //initially - target = "battle area" in center
         
     }
@@ -151,6 +152,7 @@ public class MinionScript : MonoBehaviour
 
     public void gainXP(int xpGained = 1)
     {
+        parentCastle.gainXP();
         while(Mathf.Pow(2f, level) <= (xp+= xpGained)) LevelUp();
     }
 
