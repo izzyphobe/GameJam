@@ -23,7 +23,8 @@ public class MinionScript : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        level = xp = 0;
+        xp = 0;
+        level = 1;
         attack = 1;
         LevelCounterMesh = transform.Find("LevelCounter").gameObject.GetComponent<TextMesh>();
         isInHand = false;
@@ -63,6 +64,12 @@ public class MinionScript : MonoBehaviour
     public void TogglePickup()
     {
         isInHand = !isInHand;
+    }
+
+    void OnMouseDown()
+    {
+       // Debug.Log("clickMinion");
+       // isInHand = false;
     }
 
 
@@ -153,7 +160,7 @@ public class MinionScript : MonoBehaviour
     public void gainXP(int xpGained = 1)
     {
         parentCastle.gainXP();
-        while(Mathf.Pow(2f, level) <= (xp+= xpGained)) LevelUp();
+        while(level <= (xp+= xpGained)) LevelUp();
     }
 
     //TODO: nerf
@@ -165,8 +172,9 @@ public class MinionScript : MonoBehaviour
         attack *= 2;
         health = maxhealth;
         LevelCounterMesh.text = level.ToString();
+        transform.localScale = transform.localScale * 1.2f;
         //Debug.Log("Level Up!");
-        xp -= (int) Mathf.Pow(2f, level);
+        xp -= (int) level;
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
@@ -190,6 +198,19 @@ public class MinionScript : MonoBehaviour
                 if (enemy.Hurt(attack)) gainXP();
             }
             
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("trigger " + other.tag);
+        if (other.tag == "Die") { 
+            Die();
+        }
+
+        if(other.tag == "Heal")
+        {
+            Hurt(-10);
         }
     }
 

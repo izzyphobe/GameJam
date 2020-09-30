@@ -7,7 +7,7 @@ public class PlayerControls : MonoBehaviour
 {
     GameObject TargetMinion;
     //
-    delegate void Del(GameObject Minion);
+    delegate void Del();
     Del selectedTool;
     Vector3 MousePos;
     public Button GH;
@@ -15,10 +15,14 @@ public class PlayerControls : MonoBehaviour
     public Button HL;
     ColorBlock selectColors;
     ColorBlock normColors;
+    public GameObject smiteObj;
+    public GameObject godHandObj;
+    public GameObject healObj;
 
     // Start is called before the first frame update
     void Start()
     {
+        
         selectedTool = StubMethod;
         selectColors = GH.colors;
         normColors = SM.colors;
@@ -29,28 +33,33 @@ public class PlayerControls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        TargetUnderMouse();
-        if(TargetMinion != null)
+        //TargetUnderMouse();
+        // if(TargetMinion != null)
+        //{
+        //    selectedTool();
+        // } 
+        if (Input.GetMouseButtonDown(0) && selectedTool!=null)
         {
-            selectedTool(TargetMinion);
+            Debug.Log("up click");
+            selectedTool();
         }
     }
 
-    void onMouseDown()
+    void OnMouseDown()
     {
-        Debug.Log("Click");
-        TargetUnderMouse();
-        if (TargetMinion != null)
-        {
-            selectedTool(TargetMinion);
-        }
+       // Debug.Log("Click");
+       // TargetUnderMouse();
+      //  if (TargetMinion != null)
+       //{
+        //    selectedTool();
+       // }
     }
 
     // This is the default behavior when clicking a minion without a tool selected
     // left intionially blank
-    void StubMethod(GameObject Minion)
+    void StubMethod()
     {
-        Debug.Log("Stub called on " + Minion.tag + " Minion");
+       // Debug.Log("Stub called on " + Minion.tag + " Minion");
     }
     public void SetStubMethod()
     {
@@ -58,10 +67,10 @@ public class PlayerControls : MonoBehaviour
     }
 
     //moves minion to mouse location
-    void GodHand(GameObject Minion)
+    void GodHand()
     {
         Debug.Log("Calling godhand");
-        Minion.GetComponent<MinionScript>().TogglePickup();
+        godHandObj.GetComponent<GodHandBehavior>().SendMessage("go");
     }
 
     public void SetGodHand()
@@ -73,11 +82,13 @@ public class PlayerControls : MonoBehaviour
         HL.colors = normColors;
     }
 
-    //moves minion to mouse location
-    void Smite(GameObject Minion)
+    //moves minion to mouse locGation
+    void Smite()
     {
         Debug.Log("Calling Smite");
-        Minion.GetComponent<MinionScript>().Hurt(5);
+        smiteObj.GetComponent<smiteBehavior>().go();
+       // Minion.GetComponent<MinionScript>().Hurt(5);
+
     }
 
     public void SetSmite()
@@ -89,10 +100,11 @@ public class PlayerControls : MonoBehaviour
         HL.colors = normColors;
     }
 
-    void Heal(GameObject Minion)
+    void Heal()
     {
-        Debug.Log("Calling Smite");
-        Minion.GetComponent<MinionScript>().Hurt(-5);
+        Debug.Log("Calling Heal");
+        healObj.GetComponent<healBehavior>().go();
+        // Minion.GetComponent<MinionScript>().Hurt(-5);
     }
 
     public void SetHeal()

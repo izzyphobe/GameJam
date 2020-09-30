@@ -8,6 +8,8 @@ TagManager:
   - Blue
   - Red
   - Battlefield
+  - Die
+  - Heal
   layers:
   - Default
   - TransparentFX

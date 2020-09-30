@@ -49,20 +49,20 @@ public class Castle : MonoBehaviour
             GameObject NewChild = Instantiate(prefab, transform);
             MinionScript childScript = NewChild.GetComponent<MinionScript>();
             NewChild.tag = this.tag;
-            for(int i = 0; i<level; i++) childScript.LevelUp();
+            for(int i = 1; i<level; i++) childScript.LevelUp();
             yield return new WaitForSeconds(delay);
         }
     }
 
     public void gainXP(int xpGained = 1)
     {
-        while(Mathf.Pow(5f, level) <= (xp+= xpGained)) LevelUp();
+        while(Mathf.Pow(3f, level) <= (xp+= xpGained)) LevelUp();
     }
 
     public void LevelUp()
     {
         level++;
-        xp -= (int) Mathf.Pow(5f, level);
+        xp -= (int) Mathf.Pow(3f, level);
         
     }
     public bool Hurt(int damage = 1){
