@@ -343,8 +343,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   target: {fileID: 0}
-  speed: 0.5
-  maxhealth: 10
-  health: 6
-  bounce: 0.25
+  speed: 0.4
+  maxhealth: 200
+  health: 200
+  bounce: 0.1
   isInBattleGround: 0
+  level: 0
+  xp: 0
+  attack: 0

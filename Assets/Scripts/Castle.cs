@@ -14,8 +14,8 @@ public class Castle : MonoBehaviour
     private int minionCap;
     public GameObject prefab;
     private MinionScript minion;
-    private float minSpawn = 1f;
-    private float maxSpawn = 2f;
+    private float minSpawn = .2f;
+    private float maxSpawn = .5f;
     public float health, maxhealth;
 
     private int xp, level;
@@ -28,8 +28,8 @@ public class Castle : MonoBehaviour
 
         maxhealth = health = 10f;
         minion = prefab.GetComponent<MinionScript>();
-        minion.maxhealth = 10;
-        minion.speed = 0.5f;
+        //minion.maxhealth = 200f;
+        //minion.speed = 0.5f;
         minionCap = 5000;
         //InvokeRepeating("Spawn",delay,rate);
         StartCoroutine(SpawnWithCoroutine());
@@ -42,15 +42,34 @@ public class Castle : MonoBehaviour
     }
 
     IEnumerator SpawnWithCoroutine(){
+        var count = Random.Range(8, 13);
+        int bias = Random.Range(-1, 2) *5;
+        var bReset = 10;
         while (true)
         {
-            var delay = Random.Range(minSpawn, maxSpawn);
-            //Debug.Log("callingSpawn. delay till next call:" + delay);
-            GameObject NewChild = Instantiate(prefab, transform);
-            MinionScript childScript = NewChild.GetComponent<MinionScript>();
-            NewChild.tag = this.tag;
-            for(int i = 1; i<level; i++) childScript.LevelUp();
-            yield return new WaitForSeconds(delay);
+            if (count-- == 0)
+            {
+                if (bReset-- == 0)
+                {
+                    bias= Random.Range(-1, 2)*3*level;
+                    bReset = 10;
+                }
+                count = Random.Range(level*3+5,3*level+10)+bias;
+                yield return new WaitForSeconds(Random.Range(5f,8f));
+            }
+            else
+            {
+                var delay = Random.Range(minSpawn, maxSpawn);
+                //Debug.Log("callingSpawn. delay till next call:" + delay);
+                GameObject NewChild = Instantiate(prefab, transform);
+                MinionScript childScript = NewChild.GetComponent<MinionScript>();
+                NewChild.tag = this.tag;
+                for (int i = 1; i < level; i++) if(Random.Range(0f,1f)>.4f) childScript.LevelUp();
+                childScript.health = childScript.maxhealth;
+               //Debug.Log("spawn l" + childScript.level + "  h" + childScript.health + "  a" + childScript.attack);
+                yield return new WaitForSeconds(.3f);
+                
+            }
         }
     }
 
@@ -79,7 +98,7 @@ public class Castle : MonoBehaviour
     void Die(){
         //Debug.Log(gameObject.tag + " minion died");
         Time.timeScale = 0;
-        SceneManager.LoadScene("GameOver");
+        SceneManager.LoadScene("GameOver", LoadSceneMode.Additive);
 
     }
 

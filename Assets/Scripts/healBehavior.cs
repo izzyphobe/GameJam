@@ -45,7 +45,7 @@ public class healBehavior : MonoBehaviour
         if (!active)
         {
             active = true;
-            timer = 100;
+            timer = 10;
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
             transform.position = mousePos2D;

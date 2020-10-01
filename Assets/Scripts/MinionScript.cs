@@ -17,8 +17,11 @@ public class MinionScript : MonoBehaviour
     Castle enemyCastle, parentCastle;
     bool isInHand;
     public bool isInBattleGround;
-    int level, xp, attack;
+    public int level, xp, attack;
     TextMesh LevelCounterMesh;
+    int lookTime;
+    int range = 3;
+    int ignore;
 
     // Start is called before the first frame update
     void Awake()
@@ -51,6 +54,12 @@ public class MinionScript : MonoBehaviour
     }
 
     void FixedUpdate(){
+        if (lookTime-- < 0)
+        {
+            lookTime = 60;
+            AquireTarget();
+        }
+
         if (isInHand)
         {
             FollowMouse();
@@ -94,25 +103,26 @@ public class MinionScript : MonoBehaviour
     // else to closest enemy
     public void AquireTarget(){
         //Debug.Log("getting new target");
-        if(isInBattleGround){
-            target = FindClosestEnemy().transform;
-            //Debug.Log("Targeting nearest enemy");
-        }
-        else
-            target = GameObject.Find("Battlefield").transform;
+        
+        target = FindClosestEnemy().transform;
+        //Debug.Log("Targeting nearest enemy");
+       // if (target == null)
+       // {
+       //     target = GameObject.Find("Battlefield").transform;
+      //  }
     }
 
     //FindClosestEnemy returns closest gameObject of opposing faction. Returns null if no targets
     // based on second example from https://docs.unity3d.com/ScriptReference/GameObject.FindGameObjectsWithTag.html
-    public GameObject FindClosestEnemy(){
+    public GameObject FindClosestEnemy() {
         List<GameObject> gos = new List<GameObject>();
-        if(!tag.Equals("Red")){
+        if (!tag.Equals("Red") &&  ignore!=1) {
             gos.AddRange(GameObject.FindGameObjectsWithTag("Red"));
         }
-        if(!tag.Equals("Blue")){
+        if (!tag.Equals("Blue") &&  ignore != 2) {
             gos.AddRange(GameObject.FindGameObjectsWithTag("Blue"));
         }
-        if(!tag.Equals("Green")){
+        if (!tag.Equals("Green") &&  ignore != 3) {
             gos.AddRange(GameObject.FindGameObjectsWithTag("Green"));
         }
 
@@ -123,13 +133,26 @@ public class MinionScript : MonoBehaviour
         {
             Vector3 diff = go.transform.position - position;
             float curDistance = diff.sqrMagnitude;
+            if (go.isStatic)
+            {
+               curDistance /= 2;
+                curDistance -= 3;  // go towards casle first
+                
+            }
             if (curDistance < distance)
             {
                 closest = go;
                 distance = curDistance;
             }
         }
-        return closest;
+        if (distance < range)
+        {
+            return closest;
+        }
+        else
+        {
+            return GameObject.Find("Battlefield");
+        }
     }
 
     void SetTarget(GameObject t){ //change target to t
@@ -160,21 +183,23 @@ public class MinionScript : MonoBehaviour
     public void gainXP(int xpGained = 1)
     {
         parentCastle.gainXP();
-        while(level <= (xp+= xpGained)) LevelUp();
+        xp += xpGained;
+        while (level <= (xp)) LevelUp();
     }
 
     //TODO: nerf
     public void LevelUp()
     {
         level++;
-        maxhealth *= 1.5f;
-        speed += .1f;
-        attack *= 2;
-        health = maxhealth;
+        Hurt( (int )(-maxhealth * .05f));
+        maxhealth *= 1.1f;
+        //speed += .1f;
+        attack += 1;
+        //health = (maxhealth+health)/2;
         LevelCounterMesh.text = level.ToString();
-        transform.localScale = transform.localScale * 1.2f;
+        transform.localScale = transform.localScale * 1.1f;
         //Debug.Log("Level Up!");
-        xp -= (int) level;
+        xp -= (int)  level ;
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
@@ -191,11 +216,12 @@ public class MinionScript : MonoBehaviour
                 //Debug.Log("colission between " + tag+ " and " + collision.gameObject.tag);
                 enemy = collision.gameObject.GetComponent<MinionScript>();
                 //bounce
-                transform.position = Vector2.MoveTowards(transform.position, collision.gameObject.transform.position, -1*bounce);
-                collision.gameObject.transform.position = Vector2.MoveTowards(collision.gameObject.transform.position, transform.position, -1*bounce);
+                transform.position = Vector2.MoveTowards(transform.position, collision.gameObject.transform.position, -1*bounce* enemy.maxhealth * enemy.maxhealth / 40000);
+                //collision.gameObject.transform.position = Vector2.MoveTowards(collision.gameObject.transform.position, transform.position, -1*bounce*maxhealth/200);
 
                 //attack
-                if (enemy.Hurt(attack)) gainXP();
+                if (enemy.Hurt(attack)) gainXP(enemy.level);
+                target = collision.gameObject.transform;
             }
             
         }
@@ -203,14 +229,28 @@ public class MinionScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("trigger " + other.tag);
-        if (other.tag == "Die") { 
-            Die();
+        //Debug.Log("trigger " + other.tag);
+        if (other.tag == "Die") {
+            Hurt( (int)( maxhealth / 4)+150);
+            //Debug.Log("mh" +maxhealth + " dmg" + (int)(maxhealth / 2) + 100);
         }
 
         if(other.tag == "Heal")
         {
-            Hurt(-10);
+            Hurt(-100);
+        }
+
+        if (other.tag == "Battlefield")
+        {
+            
+            //Debug.Log("inc visin");
+            if (range != 7)
+            {
+                ignore = Random.Range(1, 4);
+               // Debug.Log("ignore" + ignore);
+            }
+            range = 7;
+
         }
     }
 
